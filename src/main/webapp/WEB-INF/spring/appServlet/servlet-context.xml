@@ -27,4 +27,5 @@
 	</beans:bean>
 		
 	<context:component-scan base-package="com.spring.board.controller" />
+	<context:component-scan base-package="com.spring.shoppingmall.controller" />
 </beans:beans>

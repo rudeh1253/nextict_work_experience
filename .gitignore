@@ -63,4 +63,4 @@ local.properties
 .project
 .settings
 build
-root-context.xml
+src/main/webapp/WEB-INF/spring/root-context.xml
