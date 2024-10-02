@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mbti">
+    
+    <resultMap type="com.spring.board.vo.BoardVo" id="boardVo">
+    	<result property="boardType" 	column="BOARD_TYPE"/>
+    	<result property="boardNum" 	column="BOARD_NUM"/>
+    	<result property="boardComment" column="BOARD_COMMENT"/>
+    </resultMap>
+    
+    <select id="selectQuestionsOfType" parameterType="java.util.List" resultMap="boardVo">
+    	SELECT
+    		BOARD_TYPE
+    		,BOARD_NUM
+    		,BOARD_COMMENT
+    	FROM BOARD
+    	<where>
+    		<if test="list.size() != 0">
+	    		BOARD_TYPE IN
+	    		<foreach collection="list" item="elem" open="(" separator="," close=")">
+	    			#{elem}
+	    		</foreach>
+    		</if>
+    	</where>
+    	ORDER BY BOARD_NUM, BOARD_TYPE
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="education">
+
+	<resultMap id="educationVo" type="com.spring.board.vo.EducationVo">
+		<id     property="eduSeq"      column="EDU_SEQ"      jdbcType="VARCHAR" />
+		<result property="seq"         column="SEQ"          jdbcType="VARCHAR" />
+		<result property="schoolName"  column="SCHOOL_NAME"  jdbcType="VARCHAR" />
+		<result property="division"    column="DIVISION"     jdbcType="VARCHAR" />
+		<result property="startPeriod" column="START_PERIOD" jdbcType="VARCHAR" />
+		<result property="endPeriod"   column="END_PERIOD"   jdbcType="VARCHAR" />
+		<result property="major"       column="MAJOR"        jdbcType="VARCHAR" />
+		<result property="grade"       column="GRADE"        jdbcType="VARCHAR" />
+		<result property="location"    column="LOCATION"     jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<insert id="insertEducation" parameterType="com.spring.board.vo.EducationVo">
+		INSERT INTO EDUCATION
+		(
+		EDU_SEQ,
+		SEQ,
+		SCHOOL_NAME,
+		DIVISION,
+		START_PERIOD,
+		END_PERIOD,
+		MAJOR,
+		GRADE,
+		LOCATION
+		)
+		VALUES
+		(
+		
+		NVL((
+            SELECT TO_NUMBER(MAX(TO_NUMBER(EDU_SEQ)) + 1)
+            FROM EDUCATION
+        ), 1),
+		
+		#{seq: VARCHAR},
+		#{schoolName: VARCHAR},
+		#{division: VARCHAR},
+		#{startPeriod: VARCHAR},
+		#{endPeriod: VARCHAR},
+		#{major: VARCHAR},
+		#{grade: VARCHAR},
+		#{location: VARCHAR}
+		)
+	</insert>
+	
+	<delete id="deleteEducation" parameterType="java.lang.String">
+		DELETE FROM EDUCATION
+		WHERE SEQ = #{seq: VARCHAR}
+	</delete>
+</mapper>

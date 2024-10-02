@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recruit">
+	<insert id="insertRecruit" parameterType="com.spring.board.vo.RecruitVo">
+		<selectKey keyProperty="seq" resultType="java.lang.String" order="BEFORE">
+            SELECT TO_CHAR(NVL(MAX(TO_NUMBER(SEQ)), 1) + 1)
+            FROM RECRUIT
+		</selectKey>
+		INSERT INTO RECRUIT
+		(
+		SEQ,
+		NAME,
+		BIRTH,
+		GENDER,
+		PHONE,
+		EMAIL,
+		ADDR,
+		LOCATION,
+		WORK_TYPE,
+		SUBMIT
+		)
+		VALUES
+		(
+		
+		#{seq: VARCHAR},
+		#{name: VARCHAR},
+		#{birth: VARCHAR},
+		#{gender: VARCHAR},
+		#{phone: VARCHAR},
+		#{email: VARCHAR},
+		#{addr: VARCHAR},
+		#{location: VARCHAR},
+		#{workType: VARCHAR},
+		#{submit: VARCHAR}
+		)
+	</insert>
+	
+	<resultMap id="recruitVo" type="com.spring.board.vo.RecruitVo">
+		<id     property="seq"      column="SEQ"       jdbcType="VARCHAR" />
+		<result property="name"     column="NAME"      jdbcType="VARCHAR" />
+		<result property="birth"    column="BIRTH"     jdbcType="VARCHAR" />
+		<result property="gender"   column="GENDER"    jdbcType="VARCHAR" />
+		<result property="phone"    column="PHONE"     jdbcType="VARCHAR" />
+		<result property="email"    column="EMAIL"     jdbcType="VARCHAR" />
+		<result property="addr"     column="ADDR"      jdbcType="VARCHAR" />
+		<result property="location" column="LOCATION"  jdbcType="VARCHAR" />
+		<result property="workType" column="WORK_TYPE" jdbcType="VARCHAR" />
+		<result property="submit"   column="SUBMIT"    jdbcType="VARCHAR" />
+		
+		<collection property="certificates" resultMap="certificate.certificateVo" columnPrefix="CE_" />
+		
+		<collection property="educations" resultMap="education.educationVo" columnPrefix="E_" />
+		
+		<collection property="careers" resultMap="career.careerVo" columnPrefix="CA_" />
+	</resultMap>
+	
+	<select id="selectRecruit" parameterType="java.util.Map" resultMap="recruitVo">
+		SELECT
+			r.SEQ            SEQ,
+			r.NAME           NAME,
+			r.BIRTH          BIRTH,
+			r.GENDER         GENDER,
+			r.PHONE          PHONE,
+			r.EMAIL          EMAIL,
+			r.ADDR           ADDR,
+			r.LOCATION       LOCATION,
+			r.WORK_TYPE      WORK_TYPE,
+			r.SUBMIT         SUBMIT,
+			
+			ce.CERT_SEQ      CE_CERT_SEQ,
+			ce.SEQ           CE_SEQ,
+			ce.QUALIFI_NAME  CE_QUALIFI_NAME,
+			ce.ACQU_DATE     CE_ACQU_DATE,
+			ce.ORGANIZE_NAME CE_ORGANIZE_NAME,
+			
+			e.EDU_SEQ        E_EDU_SEQ,
+			e.SCHOOL_NAME    E_SCHOOL_NAME,
+			e.DIVISION       E_DIVISION,
+			e.START_PERIOD   E_START_PERIOD,
+			e.END_PERIOD     E_END_PERIOD,
+			e.MAJOR          E_MAJOR,
+			e.GRADE          E_GRADE,
+			e.LOCATION       E_LOCATIN,
+			
+			ca.CAR_SEQ       CA_CAR_SEQ,
+			ca.SEQ           CA_SEQ,
+			ca.COMP_NAME     CA_COMP_NAME,
+			ca.LOCATION      CA_LOCATION,
+			ca.START_PERIOD  CA_START_PERIOD,
+			ca.END_PERIOD    CA_END_PERIOD,
+			ca.TASK          CA_TASK,
+			ca.SALARY        CA_SALARY
+
+		FROM RECRUIT R
+		LEFT OUTER JOIN CERTIFICATE CE ON CE.SEQ = R.SEQ
+		LEFT OUTER JOIN EDUCATION E ON E.SEQ = R.SEQ
+		LEFT OUTER JOIN CAREER CA ON CA.SEQ = R.SEQ
+		WHERE R.NAME = #{name: VARCHAR}
+			AND R.PHONE = #{phone: VARCHAR}
+		ORDER BY E.END_PERIOD DESC, CA.END_PERIOD DESC, CE.ACQU_DATE DESC
+	</select>
+	
+	<update id="updateRecruit" parameterType="com.spring.board.vo.RecruitVo">
+		UPDATE RECRUIT
+		<set>
+			<if test="name != null">
+				NAME = #{name: VARCHAR},
+			</if>
+			<if test="birth != null">
+				BIRTH = #{birth: VARCHAR},
+			</if>
+			<if test="gender != null">
+				GENDER = #{gender: VARCHAR},
+			</if>
+			<if test="phone != null">
+				PHONE = #{phone: VARCHAR},
+			</if>
+			<if test="email != null">
+				EMAIL = #{email: VARCHAR},
+			</if>
+			<if test="addr != null">
+				ADDR = #{addr: VARCHAR},
+			</if>
+			<if test="location != null">
+				LOCATION = #{location: VARCHAR},
+			</if>
+			<if test="workType != null">
+				WORK_TYPE = #{workType: VARCHAR},
+			</if>
+			<if test="submit != null">
+				SUBMIT = #{submit: VARCHAR},
+			</if>
+		</set>
+		WHERE SEQ = #{seq: VARCHAR}
+	</update>
+</mapper>

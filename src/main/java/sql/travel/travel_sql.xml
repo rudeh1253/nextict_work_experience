@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel">
+
+	<insert id="insertClientInfo" parameterType="com.spring.board.vo.travel.ClientVo">
+		INSERT INTO CLIENT_INFO
+		(
+		SEQ,
+		USER_NAME,
+		USER_PHONE,
+		TRAVE_CITY,
+		PERIOD,
+		EXPEND,
+		TRANSPORT
+		)
+		VALUES
+		(
+		NVL((
+            SELECT TO_NUMBER(MAX(TO_NUMBER(SEQ)) + 1)
+            FROM CLIENT_INFO
+        ), 1),
+        #{userName: VARCHAR},
+        #{userPhone: VARCHAR},
+        #{travelCity: VARCHAR},
+        #{period: VARCHAR},
+        #{expend: VARCHAR},
+        #{transport: VARCHAR}
+		)
+	</insert>
+	
+	<resultMap id="clientVo" type="com.spring.board.vo.travel.ClientVo">
+		<id column="SEQ" property="seq" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="USER_PHONE" property="userPhone" jdbcType="VARCHAR" />
+		<result column="PERIOD" property="period" jdbcType="VARCHAR" />
+		<result column="TRANSPORT" property="transport" jdbcType="VARCHAR" />
+		<result column="EXPEND" property="expend" jdbcType="VARCHAR" />
+		<result column="TRAVE_CITY" property="travelCity" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="selectClients" resultMap="clientVo">
+		SELECT
+			SEQ,
+			USER_NAME,
+			USER_PHONE,
+			PERIOD,
+			TRANSPORT,
+			EXPEND,
+			TRAVE_CITY
+		FROM CLIENT_INFO
+	</select>
+	
+	<select id="selectClient" parameterType="java.util.Map" resultMap="clientVo">
+		SELECT
+			SEQ,
+			USER_NAME,
+			USER_PHONE,
+			PERIOD,
+			TRANSPORT,
+			EXPEND,
+			TRAVE_CITY
+		FROM CLIENT_INFO
+		WHERE USER_NAME = #{userName} AND USER_PHONE = #{userPhone}
+	</select>
+	
+	<select id="selectClientBySeq" parameterType="java.lang.String" resultMap="clientVo">
+		SELECT
+			SEQ,
+			USER_NAME,
+			USER_PHONE,
+			PERIOD,
+			TRANSPORT,
+			EXPEND,
+			TRAVE_CITY
+		FROM CLIENT_INFO
+		WHERE SEQ = #{seq}
+	</select>
+	
+	<resultMap id="travelInfoVo" type="com.spring.board.vo.travel.TravelInfoVo">
+		<id property="travelSeq" column="TRAVE_SEQ" jdbcType="VARCHAR" />
+		<result property="seq" column="SEQ" jdbcType="VARCHAR" />
+		<result property="travelDay" column="TRAVE_DAY" jdbcType="VARCHAR" />
+		<result property="travelTime" column="TRAVE_TIME" jdbcType="VARCHAR" />
+		<result property="travelCity" column="TRAVE_CITY" jdbcType="VARCHAR" />
+		<result property="travelCounty" column="TRAVE_COUNTY" jdbcType="VARCHAR" />
+		<result property="travelLoc" column="TRAVE_LOC" jdbcType="VARCHAR" />
+		<result property="travelTrans" column="TRAVE_TRANS" jdbcType="VARCHAR" />
+		<result property="transTime" column="TRANS_TIME" jdbcType="VARCHAR" />
+		<result property="useTime" column="USE_TIME" jdbcType="VARCHAR" />
+		<result property="useExpend" column="USE_EXPEND" jdbcType="VARCHAR" />
+		<result property="travelDetail" column="TRAVE_DETAIL" jdbcType="VARCHAR" />
+		<result property="request" column="REQUEST" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="selectTravelInfosByClientSeq" parameterType="java.lang.String" resultMap="travelInfoVo">
+		SELECT
+			TRAVE_SEQ,
+			SEQ,
+			TRAVE_DAY,
+			TRAVE_TIME,
+			TRAVE_CITY,
+			TRAVE_COUNTY,
+			TRAVE_LOC,
+			TRAVE_TRANS,
+			TRANS_TIME,
+			USE_TIME,
+			USE_EXPEND,
+			TRAVE_DETAIL,
+			REQUEST
+		FROM TRAVE_INFO
+		WHERE SEQ = #{value: VARCHAR}
+	</select>
+	
+	<insert id="insertTravelInfo" parameterType="java.util.Map">
+		INSERT INTO TRAVE_INFO
+		(
+		TRAVE_SEQ,
+		SEQ,
+		TRAVE_DAY,
+		TRAVE_TIME,
+		TRAVE_CITY,
+		TRAVE_COUNTY,
+		TRAVE_LOC,
+		TRAVE_TRANS,
+		TRANS_TIME,
+		USE_TIME,
+		USE_EXPEND,
+		TRAVE_DETAIL,
+		REQUEST
+		)
+		
+		VALUES
+		
+		(
+		NVL((
+            SELECT TO_CHAR(MAX(TO_NUMBER(TRAVE_SEQ)) + 1)
+            FROM TRAVE_INFO
+        ), '1'),
+        
+        #{seq: VARCHAR},
+        #{travelDay: VARCHAR},
+        #{travelTime: VARCHAR},
+        #{travelCity: VARCHAR},
+        #{travelCounty: VARCHAR},
+        #{travelLoc: VARCHAR},
+        #{travelTrans: VARCHAR},
+        #{transTime: VARCHAR},
+        #{useTime: VARCHAR},
+        #{useExpend: VARCHAR},
+        #{travelDetail: VARCHAR},
+        #{request: VARCHAR}
+		)
+	</insert>
+	
+	<delete id="deleteTravelInfosOfClient" parameterType="java.lang.String">
+		DELETE FROM TRAVE_INFO
+		WHERE SEQ = #{value: VARCHAR}
+	</delete>
+	
+	<delete id="deleteTravelInfoBySeqAndDay" parameterType="java.util.Map">
+		DELETE FROM TRAVE_INFO
+		WHERE SEQ = #{seq: VARCHAR}
+		AND TRAVE_DAY = #{travelDay: VARCHAR}
+	</delete>
+	
+	<update id="updateTravelInfoRequest" parameterType="java.util.Map">
+		UPDATE TRAVE_INFO
+		SET REQUEST = #{request: VARCHAR}
+		WHERE TRAVE_SEQ = #{travelSeq: VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="career">
+
+	<resultMap id="careerVo" type="com.spring.board.vo.CareerVo">
+		<id     property="carSeq"      column="CAR_SEQ"      jdbcType="VARCHAR" />
+		<result property="seq"         column="SEQ"          jdbcType="VARCHAR" />
+		<result property="compName"    column="COMP_NAME"    jdbcType="VARCHAR" />
+		<result property="location"    column="LOCATION"     jdbcType="VARCHAR" />
+		<result property="startPeriod" column="START_PERIOD" jdbcType="VARCHAR" />
+		<result property="endPeriod"   column="END_PERIOD"   jdbcType="VARCHAR" />
+		<result property="task"        column="TASK"         jdbcType="VARCHAR" />
+		<result property="salary"      column="SALARY"       jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<insert id="insertCareer" parameterType="com.spring.board.vo.CareerVo">
+		INSERT INTO CAREER
+		(
+		CAR_SEQ,
+		SEQ,
+		COMP_NAME,
+		LOCATION,
+		START_PERIOD,
+		END_PERIOD,
+		TASK,
+		SALARY
+		)
+		VALUES
+		(
+		
+		NVL((
+            SELECT TO_NUMBER(MAX(TO_NUMBER(CAR_SEQ)) + 1)
+            FROM CAREER
+        ), 1),
+		
+		#{seq: VARCHAR},
+		#{compName: VARCHAR},
+		#{location: VARCHAR},
+		#{startPeriod: VARCHAR},
+		#{endPeriod: VARCHAR},
+		#{task: VARCHAR},
+		#{salary: VARCHAR}
+		)
+	</insert>
+	
+	<delete id="deleteCareer" parameterType="java.lang.String">
+		DELETE FROM CAREER
+		WHERE SEQ = #{seq: VARCHAR}
+	</delete>
+</mapper>

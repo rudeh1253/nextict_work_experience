@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="certificate">
+
+	<resultMap id="certificateVo" type="com.spring.board.vo.CertificateVo">
+		<id     property="certSeq"      column="CERT_SEQ"      jdbcType="VARCHAR" />
+		<result property="seq"          column="SEQ"           jdbcType="VARCHAR" />
+		<result property="qualifiName"  column="QUALIFI_NAME"  jdbcType="VARCHAR" />
+		<result property="acquDate"     column="ACQU_DATE"     jdbcType="VARCHAR" />
+		<result property="organizeName" column="ORGANIZE_NAME" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<insert id="insertCertificate" parameterType="com.spring.board.vo.CertificateVo">
+		INSERT INTO CERTIFICATE
+		(
+		CERT_SEQ,
+		SEQ,
+		QUALIFI_NAME,
+		ACQU_DATE,
+		ORGANIZE_NAME
+		)
+		VALUES
+		(
+		
+		NVL((
+            SELECT TO_NUMBER(MAX(TO_NUMBER(CERT_SEQ)) + 1)
+            FROM CERTIFICATE
+        ), 1),
+		
+		#{seq: VARCHAR},
+		#{qualifiName: VARCHAR},
+		#{acquDate: VARCHAR},
+		#{organizeName: VARCHAR}
+		)
+	</insert>
+	
+	<delete id="deleteCertificate" parameterType="java.lang.String">
+		DELETE FROM CERTIFICATE
+		WHERE SEQ = #{seq: VARCHAR}
+	</delete>
+</mapper>
