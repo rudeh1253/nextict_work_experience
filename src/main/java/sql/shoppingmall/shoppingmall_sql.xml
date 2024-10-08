@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shoppingmall">
+
+	<insert id="insertPattern" parameterType="com.spring.shoppingmall.vo.ProductPatternInfo" useGeneratedKeys="true" keyProperty="productPatternIdx">
+		<selectKey keyProperty="productPatternIdx" resultType="java.lang.Integer" order="BEFORE">
+            SELECT NVL(MAX(PRDPTIDX + 1), 1)
+            FROM PRODUCTPATTERNINFO
+		</selectKey>
+		INSERT INTO PRODUCTPATTERNINFO
+		(
+		PRDPTIDX,
+		PRDGRIDX,
+		PRDPTTYPE,
+		PRDPTSORT,
+		PRDPTVIEW
+		)
+		VALUES
+		(
+		#{productPatternIdx: INTEGER},
+		#{productGroupIdx: INTEGER},
+		#{productPatternType: VARCHAR},
+		#{productPatternSort: VARCHAR},
+		#{productView: VARCHAR}
+		)
+	</insert>
+	
+	<insert id="insertPatternDetail" parameterType="com.spring.shoppingmall.vo.ProductPatternDetail">
+		INSERT INTO PRODUCTPATTERNDETAIL
+		(
+		PTDETAILIDX,
+		PRDGRIDX,
+		PRDPTIDX,
+		PTDETAILTYPE,
+		PTDETAILIMG,
+		PTDETAILDESC,
+		PTDETAILMV,
+		PRDIDX,
+		PTDETAILVIEW
+		)
+		VALUES
+		(
+		NVL((
+			SELECT MAX(PTDETAILIDX) + 1
+			FROM PRODUCTPATTERNDETAIL
+		), 1),
+		
+		#{productGroupIdx: INTEGER},
+		#{productPatternIdx: INTEGER},
+		#{ptDetailType: VARCHAR},
+		#{ptDetailImg: VARCHAR},
+		#{ptDetailDesc: VARCHAR},
+		#{ptDetailMovie: VARCHAR},
+		#{productIdx: VARCHAR},
+		#{ptDetailView: VARCHAR}
+		)
+	</insert>
+</mapper>
