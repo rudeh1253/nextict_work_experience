@@ -55,4 +55,25 @@
 		#{ptDetailView: VARCHAR}
 		)
 	</insert>
+	
+	<insert id="insertProductGroupProduct" parameterType="com.spring.shoppingmall.vo.ProductGroupProductVo">
+		INSERT INTO PRODUCTGROUPPRODUCT
+		(
+		PRDGRPRDIDX,
+		PRDGRIDX,
+		PRDIDX,
+		PRDGRPRDVIEW
+		)
+		VALUES
+		(
+		NVL((
+			SELECT MAX(PRDGRPRDIDX) + 1
+			FROM PRODUCTGROUPPRODUCT
+		), 1),
+		
+		#{productGroupIdx: INTEGER},
+		#{productIdx: VARCHAR},
+		#{productGroupProductView: VARCHAR}
+		)
+	</insert>
 </mapper>

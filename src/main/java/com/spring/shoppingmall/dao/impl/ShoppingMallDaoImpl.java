@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.shoppingmall.dao.ShoppingMallDao;
+import com.spring.shoppingmall.vo.ProductGroupProductVo;
 import com.spring.shoppingmall.vo.ProductPatternDetail;
 import com.spring.shoppingmall.vo.ProductPatternInfo;
 
@@ -22,5 +23,10 @@ public class ShoppingMallDaoImpl implements ShoppingMallDao {
 	@Override
 	public int insertPatternDetail(ProductPatternDetail productPatternDetail) {
 		return this.sqlSession.insert("shoppingmall.insertPatternDetail", productPatternDetail);
+	}
+	
+	@Override
+	public int insertProductGroupProductVo(ProductGroupProductVo productGroupProductVo) throws Exception {
+		return this.sqlSession.insert("shoppingmall.insertProductGroupProduct", productGroupProductVo);
 	}
 }

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.shoppingmall.dto.PatternDetailRequestDto;
 import com.spring.shoppingmall.dto.PatternRegistrationRequestDto;
 import com.spring.shoppingmall.service.ShoppingMallService;
+import com.spring.shoppingmall.vo.ProductGroupProductVo;
+import com.spring.shoppingmall.vo.ProductInfoVo;
 
 @Controller
 public class ShoppingMallController {
@@ -110,5 +112,50 @@ public class ShoppingMallController {
 			
 		return "{\"message\":\"success\"}";
 	}
+	
+	@RequestMapping(value = "/shoppingmall/productRegistrationView.do", method = RequestMethod.GET)
+	public String productRegistrationView(Model model, @RequestParam("productGroupIdx") Integer productGroupIdx) {
+		List<ProductInfoVo> dummyProductInfos = getDummyProductInfos();
+		model.addAttribute("productInfos", dummyProductInfos);
+		model.addAttribute("productGroupIdx", productGroupIdx);
+		
+		double dummyDiscount = 0.3;
+		model.addAttribute("discount", dummyDiscount);
+		
+		return "shoppingmall/productRegistrationView";
+	}
+	
+	private List<ProductInfoVo> getDummyProductInfos() {
+		ProductInfoVo product1 = new ProductInfoVo();
+		product1.setProductIdx(1);
+		product1.setProductBrand("asdf");
+		product1.setProductCategory("fdsa");
+		product1.setProductName("prod1");
+		product1.setProductPrice(30000);
+		product1.setProductView(true);
+		product1.setProductImage("");
+		
+		ProductInfoVo product2 = new ProductInfoVo();
+		product2.setProductIdx(2);
+		product2.setProductBrand("asdf");
+		product2.setProductCategory("fdsa");
+		product2.setProductName("prod2");
+		product2.setProductPrice(30000000);
+		product2.setProductView(true);
+		product2.setProductImage("");
+		
+		return Arrays.asList(product1, product2);
+	}
+	
+	@RequestMapping(value = "/shoppingmall/registerProduct.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String registerProduct(@RequestBody ProductGroupProductVo[] requestBody) throws Exception {
+		for (ProductGroupProductVo vo : requestBody) {
+			System.out.println(vo);
+		}
+		int row = this.shoppingMallService.insertProductRestrations(requestBody);
+		return row > 0
+				? "{\"message\":\"success\"}"
+				: "{\"message\":\"no insertion\"}";
+	}
 }
-

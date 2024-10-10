@@ -19,6 +19,7 @@ import com.spring.shoppingmall.dao.ShoppingMallDao;
 import com.spring.shoppingmall.dto.PatternDetailRequestDto;
 import com.spring.shoppingmall.dto.PatternRegistrationRequestDto;
 import com.spring.shoppingmall.service.ShoppingMallService;
+import com.spring.shoppingmall.vo.ProductGroupProductVo;
 import com.spring.shoppingmall.vo.ProductPatternDetail;
 import com.spring.shoppingmall.vo.ProductPatternInfo;
 
@@ -73,5 +74,14 @@ public class ShoppingMallServiceImpl implements ShoppingMallService {
 		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(imageDirRealPath + "/" + filename))) {
 			bos.write(binaryData);
 		}
+	}
+	
+	@Override
+	public int insertProductRestrations(ProductGroupProductVo[] products) throws Exception {
+		int row = 0;
+		for (ProductGroupProductVo product : products) {
+			row += this.shoppingMallDao.insertProductGroupProductVo(product);
+		}
+		return row;
 	}
 }
